@@ -10,5 +10,17 @@
 
     <h1>Gaming PCs</h1>
     <p>Browse our available prebuilt gaming computers.</p>
+    <% products.forEach(product => { %>
+    <div>
+        <h2><%= product.name %></h2>
+        <p>CPU: <%= product.cpu %></p>
+        <p>GPU: <%= product.gpu %></p>
+        <p>RAM: <%= product.ram %></p>
+        <p>Storage: <%= product.storage %></p>
+        <p>Price: $<%= product.price.toFixed(2) %></p>
+        <p>In Stock: <%= product.stock %></p>
+        <hr>
+    </div>
+<% }) %>
 </body>
 </html>
