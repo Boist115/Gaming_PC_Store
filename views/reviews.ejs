@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Reviews - Gaming PC Store</title>
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <h1>Reviews for <%= product.name %></h1>
+
+    <h2>Write a Review</h2>
+
+    <form action="/reviews/<%= product.id %>" method="POST">
+        <label>Rating:</label>
+        <select name="rating" required>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+        </select>
+
+        <br><br>
+
+        <label>Comments:</label>
+        <textarea name="comments" required></textarea>
+
+        <br><br>
+
+        <button type="submit">Submit Review</button>
+    </form>
+
+    <h2>Customer Reviews</h2>
+
+    <% if (reviews.length === 0) { %>
+        <p>No reviews yet.</p>
+    <% } else { %>
+        <% reviews.forEach(review => { %>
+            <p>Rating: <%= review.rating %>/5</p>
+            <p><%= review.comments %></p>
+            <hr>
+        <% }) %>
+    <% } %>
+</body>
+</html>
