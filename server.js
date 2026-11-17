@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+const securityMiddleware = require('./middleware/securityMiddleware');
+app.use(securityMiddleware);
 const PORT = 3000;
 
 // Middleware
@@ -33,6 +35,10 @@ app.use('/orders', orderRoutes);
 
 const reviewRoutes = require('./routes/reviewRoutes');
 app.use('/reviews', reviewRoutes);
+
+const errorMiddleware = require('./middleware/errorMiddleware');
+
+app.use(errorMiddleware);
 
 // Start the server
 app.listen(PORT, () => {
