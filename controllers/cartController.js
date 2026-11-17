@@ -40,4 +40,10 @@ const updateCart = (req, res) => {
     res.redirect('/cart');
 };
 
-module.exports = { showCart, addToCart, removeFromCart, updateCart };
+module.exports = {
+    cart,
+    showCart,
+    addToCart,
+    removeFromCart,
+    updateCart
+};
