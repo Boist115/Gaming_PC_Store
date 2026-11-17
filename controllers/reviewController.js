@@ -35,7 +35,18 @@ const submitReview = (req, res) => {
         return res.status(400).send('Invalid review');
     }
 
-    reviewService.addReview(1, productId, rating, comments.trim());
+    const customerId = req.session.customerId;
+
+if (!customerId) {
+    return res.redirect('/register');
+}
+
+reviewService.addReview(
+    customerId,
+    productId,
+    rating,
+    comments.trim()
+);
 
     res.redirect('/reviews/' + productId);
 };
