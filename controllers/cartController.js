@@ -1,15 +1,40 @@
 const { Cart } = require('../services/cartService');
 const productService = require('../services/productService');
 
-const cart = new Cart(1);
+const carts = new Map();
+
+function getCart(req) {
+    const customerId = req.session.customerId;
+
+    if (!customerId) {
+        return null;
+    }
+
+    if (!carts.has(customerId)) {
+        carts.set(customerId, new Cart(customerId));
+    }
+
+    return carts.get(customerId);
+}
 
 const showCart = (req, res) => {
+    const cart = getCart(req);
+
+    if (!cart) {
+        return res.redirect('/register');
+    }
+
     res.render('cart', {
         cart: cart,
         total: cart.getTotal()
     });
 };
 const addToCart = (req, res) => {
+        const cart = getCart(req);
+
+    if (!cart) {
+        return res.redirect('/register');
+    }
     const productId = Number(req.body.productId);
     const product = productService.getAllProducts().find(
         p => p.id === productId
@@ -23,12 +48,22 @@ const addToCart = (req, res) => {
     res.redirect('/cart');
 };
 const removeFromCart = (req, res) => {
+        const cart = getCart(req);
+
+    if (!cart) {
+        return res.redirect('/register');
+    }
     const productId = Number(req.body.productId);
 
     cart.removeItem(productId);
     res.redirect('/cart');
 };
 const updateCart = (req, res) => {
+        const cart = getCart(req);
+
+    if (!cart) {
+        return res.redirect('/register');
+    }
     const productId = Number(req.body.productId);
     const quantity = Number(req.body.quantity);
 
@@ -41,7 +76,7 @@ const updateCart = (req, res) => {
 };
 
 module.exports = {
-    cart,
+    getCart,
     showCart,
     addToCart,
     removeFromCart,

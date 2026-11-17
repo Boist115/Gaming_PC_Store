@@ -2,6 +2,18 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+const session = require('express-session');
+const crypto = require('crypto');
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex'),
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: 'lax'
+    }
+}));
 const securityMiddleware = require('./middleware/securityMiddleware');
 app.use(securityMiddleware);
 const PORT = 3000;

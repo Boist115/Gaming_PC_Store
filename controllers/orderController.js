@@ -3,7 +3,11 @@ const cartController = require('./cartController');
 
 const checkout = (req, res) => {
     try {
-        const cart = cartController.cart;
+        const cart = cartController.getCart(req);
+
+if (!cart) {
+    return res.redirect('/register');
+}
 
         const order = orderService.createOrder(
             cart.customerId,
@@ -19,11 +23,13 @@ const checkout = (req, res) => {
 };
 
 const showOrders = (req, res) => {
-    const cart = cartController.cart;
+    const customerId = req.session.customerId;
 
-    const orders = orderService.getCustomerOrders(
-        cart.customerId
-    );
+    if (!customerId) {
+        return res.redirect('/register');
+    }
+
+    const orders = orderService.getCustomerOrders(customerId);
 
     res.render('orders', { orders });
 };

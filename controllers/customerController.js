@@ -14,11 +14,26 @@ const registerCustomer = async (req, res) => {
     }
 
     try {
-        await customerService.registerCustomer(
-            name, email, password, address
-        );
+        const customer = await customerService.registerCustomer(
+    name, email, password, address
+);
+
+req.session.regenerate((err) => {
+    if (err) {
+        return res.status(500).send('Session error');
+    }
+
+    req.session.customerId = customer.id;
+
+    req.session.save((err) => {
+        if (err) {
+            return res.status(500).send('Session error');
+        }
 
         res.redirect('/products');
+    });
+});
+
     } catch (error) {
         res.status(400).render('register', {
             error: error.message
